@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from database import connect_database
 
 from matplotlib.figure import Figure
@@ -80,7 +80,9 @@ def open_analysis(user_id, dashboard):
         update_scroll_region
     )
 
-    # Mouse wheel scrolling
+    # =================================================
+    # MOUSE SCROLL
+    # =================================================
 
     def mouse_wheel(event):
 
@@ -105,7 +107,9 @@ def open_analysis(user_id, dashboard):
         bg="#f4f6f8"
     )
 
-    title.pack(pady=(25, 5))
+    title.pack(
+        pady=(25, 5)
+    )
 
     subtitle = tk.Label(
         content_frame,
@@ -114,10 +118,12 @@ def open_analysis(user_id, dashboard):
         bg="#f4f6f8"
     )
 
-    subtitle.pack(pady=(0, 20))
+    subtitle.pack(
+        pady=(0, 20)
+    )
 
     # =================================================
-    # SUMMARY
+    # SUMMARY CARDS
     # =================================================
 
     summary_frame = tk.Frame(
@@ -151,7 +157,9 @@ def open_analysis(user_id, dashboard):
         text="TOTAL INCOME",
         font=("Arial", 11, "bold"),
         bg="white"
-    ).pack(pady=(20, 5))
+    ).pack(
+        pady=(20, 5)
+    )
 
     income_label = tk.Label(
         income_card,
@@ -186,7 +194,9 @@ def open_analysis(user_id, dashboard):
         text="TOTAL EXPENSE",
         font=("Arial", 11, "bold"),
         bg="white"
-    ).pack(pady=(20, 5))
+    ).pack(
+        pady=(20, 5)
+    )
 
     expense_label = tk.Label(
         expense_card,
@@ -221,7 +231,9 @@ def open_analysis(user_id, dashboard):
         text="TOTAL SAVINGS",
         font=("Arial", 11, "bold"),
         bg="white"
-    ).pack(pady=(20, 5))
+    ).pack(
+        pady=(20, 5)
+    )
 
     savings_label = tk.Label(
         savings_card,
@@ -255,8 +267,7 @@ def open_analysis(user_id, dashboard):
     )
 
     table_frame.pack(
-        padx=30,
-        fill="x"
+        padx=30
     )
 
     columns = (
@@ -268,7 +279,7 @@ def open_analysis(user_id, dashboard):
         table_frame,
         columns=columns,
         show="headings",
-        height=7
+        height=6
     )
 
     analysis_table.heading(
@@ -299,50 +310,167 @@ def open_analysis(user_id, dashboard):
     )
 
     # =================================================
-    # CATEGORY CHART
+    # CHART BUTTONS
     # =================================================
 
-    chart_title = tk.Label(
+    chart_button_title = tk.Label(
         content_frame,
-        text="Expense by Category",
+        text="Data Visualizations",
         font=("Arial", 17, "bold"),
         bg="#f4f6f8"
     )
 
-    chart_title.pack(
+    chart_button_title.pack(
         pady=(25, 10)
     )
 
-    chart_frame = tk.Frame(
+    chart_buttons_frame = tk.Frame(
         content_frame,
+        bg="#f4f6f8"
+    )
+
+    chart_buttons_frame.pack(
+        pady=5
+    )
+
+    # =================================================
+    # CHART CONTAINER
+    # =================================================
+
+    chart_container = tk.Frame(
+        content_frame,
+        bg="#f4f6f8"
+    )
+
+    chart_container.pack(
+        padx=30,
+        pady=10
+    )
+
+    # =================================================
+    # BAR CHART FRAME
+    # =================================================
+
+    bar_chart_frame = tk.Frame(
+        chart_container,
         bg="white",
         bd=1,
-        relief="solid"
+        relief="solid",
+        width=950,
+        height=390
     )
 
-    chart_frame.pack(
-        padx=30
-    )
+    bar_chart_frame.pack_propagate(False)
 
-    figure = Figure(
+    bar_figure = Figure(
         figsize=(9, 3.5),
         dpi=100
     )
 
-    chart = figure.add_subplot(111)
+    bar_chart = bar_figure.add_subplot(111)
 
-    canvas = FigureCanvasTkAgg(
-        figure,
-        master=chart_frame
+    bar_canvas = FigureCanvasTkAgg(
+        bar_figure,
+        master=bar_chart_frame
     )
 
-    canvas.get_tk_widget().pack(
+    bar_canvas.get_tk_widget().pack(
+        fill="both",
+        expand=True,
         padx=10,
         pady=10
     )
 
     # =================================================
-    # MONTHLY TABLE
+    # PIE CHART FRAME
+    # =================================================
+
+    pie_chart_frame = tk.Frame(
+        chart_container,
+        bg="white",
+        bd=1,
+        relief="solid",
+        width=950,
+        height=390
+    )
+
+    pie_chart_frame.pack_propagate(False)
+
+    pie_figure = Figure(
+        figsize=(9, 3.5),
+        dpi=100
+    )
+
+    pie_chart = pie_figure.add_subplot(111)
+
+    pie_canvas = FigureCanvasTkAgg(
+        pie_figure,
+        master=pie_chart_frame
+    )
+
+    pie_canvas.get_tk_widget().pack(
+        fill="both",
+        expand=True,
+        padx=10,
+        pady=10
+    )
+
+    # =================================================
+    # SHOW BAR CHART
+    # =================================================
+
+    def show_bar_chart():
+
+        pie_chart_frame.pack_forget()
+
+        bar_chart_frame.pack()
+
+    # =================================================
+    # SHOW PIE CHART
+    # =================================================
+
+    def show_pie_chart():
+
+        bar_chart_frame.pack_forget()
+
+        pie_chart_frame.pack()
+
+    # =================================================
+    # CHART BUTTONS
+    # =================================================
+
+    bar_button = tk.Button(
+        chart_buttons_frame,
+        text="CATEGORY EXPENSE",
+        font=("Arial", 10, "bold"),
+        width=22,
+        height=2,
+        command=show_bar_chart
+    )
+
+    bar_button.grid(
+        row=0,
+        column=0,
+        padx=10
+    )
+
+    pie_button = tk.Button(
+        chart_buttons_frame,
+        text="EXPENSE DISTRIBUTION",
+        font=("Arial", 10, "bold"),
+        width=22,
+        height=2,
+        command=show_pie_chart
+    )
+
+    pie_button.grid(
+        row=0,
+        column=1,
+        padx=10
+    )
+
+    # =================================================
+    # MONTHLY FINANCIAL TABLE
     # =================================================
 
     monthly_title = tk.Label(
@@ -431,93 +559,7 @@ def open_analysis(user_id, dashboard):
     )
 
     # =================================================
-    # MONTHLY EXPENSE TREND CHART
-    # =================================================
-
-    monthly_chart_title = tk.Label(
-        content_frame,
-        text="Monthly Expense Trend",
-        font=("Arial", 17, "bold"),
-        bg="#f4f6f8"
-    )
-
-    monthly_chart_title.pack(
-        pady=(30, 10)
-    )
-
-    monthly_chart_frame = tk.Frame(
-        content_frame,
-        bg="white",
-        bd=1,
-        relief="solid"
-    )
-
-    monthly_chart_frame.pack(
-        padx=30
-    )
-
-    monthly_figure = Figure(
-        figsize=(9, 3.5),
-        dpi=100
-    )
-
-    monthly_chart = monthly_figure.add_subplot(111)
-
-    monthly_canvas = FigureCanvasTkAgg(
-        monthly_figure,
-        master=monthly_chart_frame
-    )
-
-    monthly_canvas.get_tk_widget().pack(
-        padx=10,
-        pady=10
-    )
-
-    # =================================================
-    # INCOME VS EXPENSE CHART
-    # =================================================
-
-    comparison_title = tk.Label(
-        content_frame,
-        text="Monthly Income vs Expense",
-        font=("Arial", 17, "bold"),
-        bg="#f4f6f8"
-    )
-
-    comparison_title.pack(
-        pady=(30, 10)
-    )
-
-    comparison_frame = tk.Frame(
-        content_frame,
-        bg="white",
-        bd=1,
-        relief="solid"
-    )
-
-    comparison_frame.pack(
-        padx=30
-    )
-
-    comparison_figure = Figure(
-        figsize=(9, 3.5),
-        dpi=100
-    )
-
-    comparison_chart = comparison_figure.add_subplot(111)
-
-    comparison_canvas = FigureCanvasTkAgg(
-        comparison_figure,
-        master=comparison_frame
-    )
-
-    comparison_canvas.get_tk_widget().pack(
-        padx=10,
-        pady=10
-    )
-
-    # =================================================
-    # LOAD ANALYSIS
+    # LOAD DATA
     # =================================================
 
     def load_analysis():
@@ -552,6 +594,7 @@ def open_analysis(user_id, dashboard):
             ), 0)
 
         FROM transactions
+
         WHERE user_id = %s
         """
 
@@ -588,20 +631,26 @@ def open_analysis(user_id, dashboard):
         )
 
         # =================================================
-        # CATEGORY-WISE EXPENSE
+        # CATEGORY DATA
         # =================================================
 
         for item in analysis_table.get_children():
+
             analysis_table.delete(item)
 
         category_query = """
         SELECT
             category,
             SUM(amount)
+
         FROM transactions
+
         WHERE user_id = %s
+
         AND transaction_type = 'Expense'
+
         GROUP BY category
+
         ORDER BY SUM(amount) DESC
         """
 
@@ -612,63 +661,62 @@ def open_analysis(user_id, dashboard):
 
         records = cursor.fetchall()
 
+        categories = []
+        category_expenses = []
+
         for record in records:
+
+            category = record[0]
+            amount = float(record[1])
+
+            categories.append(category)
+            category_expenses.append(amount)
 
             analysis_table.insert(
                 "",
                 "end",
                 values=(
-                    record[0],
+                    category,
                     "₹ " + format(
-                        float(record[1]),
+                        amount,
                         ",.2f"
                     )
                 )
             )
 
         # =================================================
-        # CATEGORY CHART
+        # BAR CHART
         # =================================================
 
-        categories = []
-        category_expenses = []
+        bar_chart.clear()
 
-        for record in records:
-
-            categories.append(record[0])
-            category_expenses.append(
-                float(record[1])
-            )
-
-        chart.clear()
-
-        chart.set_title(
+        bar_chart.set_title(
             "Category-wise Expense"
         )
 
-        chart.set_xlabel(
+        bar_chart.set_xlabel(
             "Category"
         )
 
-        chart.set_ylabel(
+        bar_chart.set_ylabel(
             "Expense (₹)"
         )
 
         if categories:
 
-            chart.bar(
+            bar_chart.bar(
                 categories,
                 category_expenses
             )
 
-            chart.tick_params(
+            bar_chart.tick_params(
                 axis="x",
                 rotation=30
             )
 
         else:
 
-            chart.text(
+            bar_chart.text(
                 0.5,
                 0.5,
                 "No expense data available",
@@ -676,15 +724,51 @@ def open_analysis(user_id, dashboard):
                 va="center"
             )
 
-        figure.tight_layout()
+        bar_figure.tight_layout()
 
-        canvas.draw()
+        bar_canvas.draw()
+
+        # =================================================
+        # PIE CHART
+        # =================================================
+
+        pie_chart.clear()
+
+        pie_chart.set_title(
+            "Expense Distribution by Category"
+        )
+
+        if categories:
+
+            pie_chart.pie(
+                category_expenses,
+                labels=categories,
+                autopct="%1.1f%%",
+                startangle=90
+            )
+
+            pie_chart.axis("equal")
+
+        else:
+
+            pie_chart.text(
+                0.5,
+                0.5,
+                "No expense data available",
+                ha="center",
+                va="center"
+            )
+
+        pie_figure.tight_layout()
+
+        pie_canvas.draw()
 
         # =================================================
         # MONTHLY ANALYSIS
         # =================================================
 
         for item in monthly_table.get_children():
+
             monthly_table.delete(item)
 
         monthly_query = """
@@ -730,14 +814,16 @@ def open_analysis(user_id, dashboard):
 
         monthly_records = cursor.fetchall()
 
-        months = []
-        monthly_expenses = []
-        monthly_incomes = []
-
         for record in monthly_records:
 
-            monthly_income = float(record[1])
-            monthly_expense = float(record[2])
+            monthly_income = float(
+                record[1]
+            )
+
+            monthly_expense = float(
+                record[2]
+            )
+
             monthly_savings = (
                 monthly_income
                 - monthly_expense
@@ -763,135 +849,8 @@ def open_analysis(user_id, dashboard):
                 )
             )
 
-            months.append(record[0])
-            monthly_incomes.append(
-                monthly_income
-            )
-            monthly_expenses.append(
-                monthly_expense
-            )
-
-        # =================================================
-        # MONTHLY EXPENSE TREND
-        # =================================================
-
-        monthly_chart.clear()
-
-        monthly_chart.set_title(
-            "Monthly Expense Trend"
-        )
-
-        monthly_chart.set_xlabel(
-            "Month"
-        )
-
-        monthly_chart.set_ylabel(
-            "Expense (₹)"
-        )
-
-        if months:
-
-            monthly_chart.plot(
-                months,
-                monthly_expenses,
-                marker="o"
-            )
-
-            monthly_chart.tick_params(
-                axis="x",
-                rotation=30
-            )
-
-        else:
-
-            monthly_chart.text(
-                0.5,
-                0.5,
-                "No monthly expense data available",
-                ha="center",
-                va="center"
-            )
-
-        monthly_figure.tight_layout()
-
-        monthly_canvas.draw()
-
-        # =================================================
-        # INCOME VS EXPENSE
-        # =================================================
-
-        comparison_chart.clear()
-
-        comparison_chart.set_title(
-            "Monthly Income vs Expense"
-        )
-
-        comparison_chart.set_xlabel(
-            "Month"
-        )
-
-        comparison_chart.set_ylabel(
-            "Amount (₹)"
-        )
-
-        if months:
-
-            x_values = list(
-                range(len(months))
-            )
-
-            width = 0.35
-
-            income_positions = [
-                x - width / 2
-                for x in x_values
-            ]
-
-            expense_positions = [
-                x + width / 2
-                for x in x_values
-            ]
-
-            comparison_chart.bar(
-                income_positions,
-                monthly_incomes,
-                width=width,
-                label="Income"
-            )
-
-            comparison_chart.bar(
-                expense_positions,
-                monthly_expenses,
-                width=width,
-                label="Expense"
-            )
-
-            comparison_chart.set_xticks(
-                x_values
-            )
-
-            comparison_chart.set_xticklabels(
-                months,
-                rotation=30
-            )
-
-            comparison_chart.legend()
-
-        else:
-
-            comparison_chart.text(
-                0.5,
-                0.5,
-                "No monthly data available",
-                ha="center",
-                va="center"
-            )
-
-        comparison_figure.tight_layout()
-
-        comparison_canvas.draw()
-
         cursor.close()
+
         connection.close()
 
         main_canvas.configure(
@@ -924,6 +883,12 @@ def open_analysis(user_id, dashboard):
     back_button.pack(
         pady=30
     )
+
+    # =================================================
+    # DEFAULT CHART
+    # =================================================
+
+    show_bar_chart()
 
     # =================================================
     # LOAD DATA
