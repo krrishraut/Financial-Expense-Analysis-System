@@ -6,7 +6,7 @@ def connect_database():
         connection = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="YOUR_MYSQL_PASSWORD",
+            password="dummy pass",
             database="financial_expense_tracker"
         )
 
